@@ -13,7 +13,7 @@
     <form v-if="action == 'addNew'" @submit.prevent="addMeal">
       <hr />
       <div>
-        <label for="foodName">Meal</label>
+        <label for="foodName">Meal Name</label>
         <input
           id="foodName"
           type="text"
@@ -28,7 +28,7 @@
         @changed="(val) => (state.newMeal.difficulty = val)"
       />
       <RadioStars
-        name="Rating"
+        name="Tastiness"
         @changed="(val) => (state.newMeal.rating = val)"
       />
       <div>
@@ -70,8 +70,29 @@
         <option value="scored-desc">Tricky Gross</option>
       </select>
     </form>
-    <div v-for="(data, i) in filtered" :key="i">
-      <pre>{{ data }}</pre>
+    <div class="meal-output" v-for="(data, i) in filtered" :key="i">
+      <div class="meal-details">
+        <h3 class="meal-details--title">{{ data.name }}</h3>
+        <p>Tastiness: {{ data.rating }}</p>
+        <p>Difficulty: {{ data.difficulty }}</p>
+        <p>Notes: {{ data.notes }}</p>
+        <template v-if="data.tags">
+          <div class="tags-container">
+            <div v-for="(tag, i) in data.tags" :key="i" class="tag active">
+              {{ tag }}
+            </div>
+          </div>
+        </template>
+      </div>
+      <div
+        class="score-container"
+        :style="`background-color:${scoreColour(
+          data.rating - data.difficulty
+        )}`"
+      >
+        <span class="score">{{ data.rating - data.difficulty }}</span>
+        (Score)
+      </div>
     </div>
   </main>
 </template>
@@ -87,7 +108,7 @@ export default defineComponent({
   setup() {
     const { state, addMeal, loadExistingData } = global
     onMounted(loadExistingData)
-    const action = ref(false)
+    const action = ref('')
     //filtered computed  property
     const filtered = computed(() => {
       if (!state.filter || state.filter.length < 2) {
@@ -102,6 +123,10 @@ export default defineComponent({
           .includes(state.filter.split(' ').join('').toLowerCase())
       })
     })
+
+    const scoreColour = (score: number) => {
+      return score < -3 ? '#f8d7da' : score > 3 ? '#d4edda' : '#fff3cd'
+    }
 
     //sort highest rating, lowest difficulty
     const sorted = computed(() => {
@@ -123,7 +148,7 @@ export default defineComponent({
         : [...state.newMeal.tags, tag]
     }
 
-    return { state, addMeal, filtered, sorted, action, toggleTag }
+    return { state, addMeal, filtered, sorted, action, toggleTag, scoreColour }
   },
   components: {
     RadioStars
@@ -151,11 +176,11 @@ form {
   border-radius: var(--border-radius);
   background-color: rgba(55, 102, 231, 0.5);
   color: var(--action-button-color);
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   transition: all ease 0.2s;
   &.active {
     background-color: var(--action-button-background);
-    border: 2px solid rgb(69, 39, 126);
+    border: 1px solid rgb(31, 20, 51);
   }
 }
 .ctas {
@@ -166,6 +191,41 @@ form {
     flex: 1;
     width: 100%;
     min-width: 200px;
+  }
+}
+
+.meal-output {
+  display: flex;
+  margin: 2rem 0;
+  background-color: var(--input-background);
+  border-radius: calc(var(--border-radius) * 3);
+  box-shadow: 0 0 1rem -0.7rem #000;
+  .meal-details {
+    flex: 7;
+    padding: 1rem;
+    &--title {
+      margin: 0;
+    }
+    .tag {
+      padding: 0.25rem 0.5rem;
+    }
+  }
+
+  .score-container {
+    display: flex;
+    padding: 0.75rem;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-left: auto;
+    font-size: 0.75rem;
+    flex: 1;
+    border-radius: 0 calc(var(--border-radius) * 3)
+      calc(var(--border-radius) * 3) 0;
+    .score {
+      font-size: 3rem;
+      line-height: 3rem;
+    }
   }
 }
 </style>
