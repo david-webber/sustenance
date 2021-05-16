@@ -13,37 +13,26 @@
           placeholder="Meal"
         />
       </div>
+      <InputStars
+        name="Difficulty"
+        icon="😍,😃,😊,🙂,😐,🤨,😕,🙁,😠,🤬"
+        @changed="(val) => (state.newMeal.difficulty = val)"
+      />
+      <InputStars
+        name="Rating"
+        @changed="(val) => (state.newMeal.rating = val)"
+      />
       <div>
-        <label for="Rating">Rating</label>
-        <select id="Rating" required v-model="state.newMeal.rating">
-          <option disabled selected>Rating</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
-      </div>
-      <div>
-        <label for="Difficulty">Difficulty</label>
-        <select id="Difficulty" required v-model="state.newMeal.difficulty">
-          <option disabled selected>Difficulty</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
+        <label>Tags</label>
+        <input list="tags" />
+
+        <datalist id="tags">
+          <option
+            v-for="(tag, i) in state.availableTags"
+            :key="i"
+            :value="tag"
+          ></option>
+        </datalist>
       </div>
       <div>
         <label for="">Notes</label
@@ -77,7 +66,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, computed } from 'vue'
-import global from '../store/global'
+import global from '@/store/global'
+import InputStars from '@/components/InputStars.vue'
 // import { orderBy } from 'lodash'
 import { Meal } from '@/types'
 
@@ -116,6 +106,9 @@ export default defineComponent({
     })
 
     return { state, addMeal, filtered, sorted }
+  },
+  components: {
+    InputStars
   }
 })
 </script>

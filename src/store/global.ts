@@ -9,8 +9,17 @@ const state = reactive({
     name: '',
     rating: 1,
     difficulty: 1,
+    tags: [],
     notes: ''
   } as Meal,
+  availableTags: [
+    'healthy',
+    'unhealthy',
+    'pasta',
+    'rice',
+    'potatoes',
+    'contains veg'
+  ],
   storedData: [] as Meal[]
 })
 
@@ -28,8 +37,9 @@ const actions = {
       name: '',
       rating: 1,
       difficulty: 1,
+      tags: [],
       notes: ''
-    }
+    } as Meal
   }
 }
 
