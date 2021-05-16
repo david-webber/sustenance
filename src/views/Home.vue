@@ -13,12 +13,12 @@
           placeholder="Meal"
         />
       </div>
-      <InputStars
+      <RadioStars
         name="Difficulty"
         icon="😍,😃,😊,🙂,😐,🤨,😕,🙁,😠,🤬"
         @changed="(val) => (state.newMeal.difficulty = val)"
       />
-      <InputStars
+      <RadioStars
         name="Rating"
         @changed="(val) => (state.newMeal.rating = val)"
       />
@@ -67,7 +67,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed } from 'vue'
 import global from '@/store/global'
-import InputStars from '@/components/InputStars.vue'
+import RadioStars from '@/components/RadioStars.vue'
 // import { orderBy } from 'lodash'
 import { Meal } from '@/types'
 
@@ -108,7 +108,7 @@ export default defineComponent({
     return { state, addMeal, filtered, sorted }
   },
   components: {
-    InputStars
+    RadioStars
   }
 })
 </script>
