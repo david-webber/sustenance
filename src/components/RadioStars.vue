@@ -110,8 +110,8 @@ export default defineComponent({
       font-size: 0;
       &:before {
         content: attr(data-icon);
-        font-size: 7vw;
-        margin-right: 1vw;
+        font-size: 5.3vw;
+        margin-right: 1.3vw;
       }
       &:hover {
         opacity: 1;
