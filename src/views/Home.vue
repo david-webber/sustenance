@@ -2,7 +2,16 @@
   <main>
     <h1>Sustenance</h1>
     <hr />
-    <form @submit.prevent="addMeal">
+
+    <h3>Actions</h3>
+    <div class="ctas">
+      <button :disabled="action == 'addNew'" @click="action = 'addNew'">
+        Add a Meal
+      </button>
+      <button>Find a Meal</button>
+    </div>
+    <form v-if="action == 'addNew'" @submit.prevent="addMeal">
+      <hr />
       <div>
         <label for="foodName">Meal</label>
         <input
@@ -24,15 +33,17 @@
       />
       <div>
         <label>Tags</label>
-        <input list="tags" />
-
-        <datalist id="tags">
-          <option
+        <div class="tags-container">
+          <button
+            class="tag"
+            @click.prevent="toggleTag(tag)"
+            :class="{ active: state.newMeal.tags.includes(tag) }"
             v-for="(tag, i) in state.availableTags"
             :key="i"
-            :value="tag"
-          ></option>
-        </datalist>
+          >
+            {{ tag }}
+          </button>
+        </div>
       </div>
       <div>
         <label for="">Notes</label
@@ -45,9 +56,10 @@
         ></textarea>
       </div>
       <button type="submit">Add Meal</button>
+      <button @click.prevent="action = false">Cancel</button>
     </form>
-
     <hr />
+
     <form>
       <label>Filter</label>
       <input type="text" v-model="state.filter" placeholder="Filter/ Search" />
@@ -65,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue'
+import { defineComponent, onMounted, computed, ref } from 'vue'
 import global from '@/store/global'
 import RadioStars from '@/components/RadioStars.vue'
 // import { orderBy } from 'lodash'
@@ -75,7 +87,7 @@ export default defineComponent({
   setup() {
     const { state, addMeal, loadExistingData } = global
     onMounted(loadExistingData)
-
+    const action = ref(false)
     //filtered computed  property
     const filtered = computed(() => {
       if (!state.filter || state.filter.length < 2) {
@@ -105,7 +117,13 @@ export default defineComponent({
       })
     })
 
-    return { state, addMeal, filtered, sorted }
+    const toggleTag = (tag: string) => {
+      state.newMeal.tags = state.newMeal.tags.includes(tag)
+        ? state.newMeal.tags.filter((x) => x !== tag)
+        : [...state.newMeal.tags, tag]
+    }
+
+    return { state, addMeal, filtered, sorted, action, toggleTag }
   },
   components: {
     RadioStars
@@ -119,6 +137,35 @@ form {
     width: 100%;
     font-weight: bold;
     font-size: 1.3rem;
+  }
+}
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tag {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  background-color: rgba(55, 102, 231, 0.5);
+  color: var(--action-button-color);
+  border: 2px solid transparent;
+  transition: all ease 0.2s;
+  &.active {
+    background-color: var(--action-button-background);
+    border: 2px solid rgb(69, 39, 126);
+  }
+}
+.ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  button {
+    flex: 1;
+    width: 100%;
+    min-width: 200px;
   }
 }
 </style>
