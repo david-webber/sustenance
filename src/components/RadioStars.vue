@@ -59,7 +59,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const selectedVal = ref(0)
+    const selectedVal = ref(1)
 
     const icons = computed(() => {
       return props.icon.split(',')
@@ -101,6 +101,7 @@ export default defineComponent({
     opacity: 0;
     ~ label {
       opacity: 0.3;
+      transition: all ease 0.3s;
     }
     &:checked ~ label {
       opacity: 1;
