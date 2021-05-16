@@ -220,6 +220,7 @@ form {
     margin-left: auto;
     font-size: 0.75rem;
     flex: 1;
+    color: #333;
     border-radius: 0 calc(var(--border-radius) * 3)
       calc(var(--border-radius) * 3) 0;
     .score {
