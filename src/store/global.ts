@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { Meal } from '@/types'
+import { useLoadMeals, createMeal } from '@/firebase'
 
 const state = reactive({
   count: 1,
@@ -18,14 +19,13 @@ const state = reactive({
 
 const actions = {
   loadExistingData: () => {
-    const existingDataString: string = localStorage.getItem('entries') || ''
-    if (existingDataString) {
-      state.storedData = JSON.parse(existingDataString)
-    }
+
+    state.storedData = useLoadMeals()
   },
-  addMeal: () => {
-    state.storedData.push(state.newMeal)
-    localStorage.setItem('entries', JSON.stringify(state.storedData))
+  addMeal: async () => {
+
+    await createMeal({ ...state.newMeal })
+
     state.newMeal = {
       name: '',
       rating: 1,
