@@ -56,10 +56,14 @@ export default defineComponent({
     colour: {
       type: String,
       default: 'orange'
+    },
+    current: {
+      type: Number,
+      default: 0
     }
   },
   setup(props) {
-    const selectedVal = ref(1)
+    const selectedVal = ref(props.current)
 
     const icons = computed(() => {
       return props.icon.split(',')
