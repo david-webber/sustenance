@@ -1,17 +1,16 @@
 <template>
   <main>
     <h1>Sustenance</h1>
-    <hr />
-
-    <h3>Actions</h3>
+    <br />
     <div class="ctas">
-      <button :disabled="action == 'addNew'" @click="action = 'addNew'">
-        Add a Meal
+      <button @click="action != 'addNew' ? (action = 'addNew') : (action = '')">
+        <template v-if="action == 'addNew'"> Cancel </template>
+        <template v-else> Add a Meal </template>
       </button>
-      <button>Find a Meal</button>
+      <button disabled>Find a Meal</button>
     </div>
     <form v-if="action == 'addNew'" @submit.prevent="addMeal">
-      <hr />
+      <br />
       <div>
         <label for="foodName">Meal Name</label>
         <input
@@ -56,10 +55,10 @@
         ></textarea>
       </div>
       <button type="submit">Add Meal</button>
-      <button @click.prevent="action = false">Cancel</button>
     </form>
-    <hr />
 
+    <br />
+    <h3>Your Meals</h3>
     <form>
       <label>Filter</label>
       <input type="text" v-model="state.filter" placeholder="Filter/ Search" />
@@ -70,9 +69,19 @@
         <option value="scored-desc">Tricky Gross</option>
       </select>
     </form>
-    <div class="meal-output" v-for="(data, i) in filtered" :key="i">
+    <div
+      class="meal-output"
+      v-for="data in filtered"
+      :key="data.id"
+      :ref="data.id"
+    >
       <div class="meal-details">
-        <h3 class="meal-details--title">{{ data.name }}</h3>
+        <h3 class="meal-details--title">
+          {{ data.name
+          }}<span class="edit-link" title="Edit meal"
+            ><router-link :to="`/edit/${data.id}`">🖍</router-link></span
+          >
+        </h3>
         <p>Tastiness: {{ data.rating }}</p>
         <p>Difficulty: {{ data.difficulty }}</p>
         <p>Notes: {{ data.notes }}</p>
@@ -101,13 +110,21 @@
 import { defineComponent, onMounted, computed, ref } from 'vue'
 import global from '@/store/global'
 import RadioStars from '@/components/RadioStars.vue'
+// import * as Hammer from 'hammerjs'
+
 // import { orderBy } from 'lodash'
 import { Meal } from '@/types'
 
 export default defineComponent({
   setup() {
     const { state, addMeal, loadExistingData } = global
-    onMounted(loadExistingData)
+    onMounted(() => {
+      loadExistingData()
+
+      // const mealCard = ref([])
+      // console.log(mealCard)
+      // console.log(Hammer)
+    })
     const action = ref('')
     //filtered computed  property
     const filtered = computed(() => {
@@ -148,7 +165,15 @@ export default defineComponent({
         : [...state.newMeal.tags, tag]
     }
 
-    return { state, addMeal, filtered, sorted, action, toggleTag, scoreColour }
+    return {
+      state,
+      addMeal,
+      filtered,
+      sorted,
+      action,
+      toggleTag,
+      scoreColour
+    }
   },
   components: {
     RadioStars
@@ -200,6 +225,19 @@ form {
   background-color: var(--input-background);
   border-radius: calc(var(--border-radius) * 3);
   box-shadow: 0 0 1rem -0.7rem #000;
+  position: relative;
+  .edit-link {
+    a {
+      color: inherit;
+      text-decoration: none;
+      opacity: 0.75;
+      &:hover {
+        // filter: invert(1);
+        opacity: 1;
+      }
+    }
+    margin-left: 0.5rem;
+  }
   .meal-details {
     flex: 7;
     padding: 1rem;
