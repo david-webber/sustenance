@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      {{ selectedVal }}
       <div class="rating-label">
         <label :for="name">{{ name }}</label>
         <strong
@@ -14,7 +15,7 @@
             <input
               :id="`${name}${ratings + 1 - i}`"
               v-model="selectedVal"
-              @change="(e) => $emit('changed', e.target.value)"
+              @change="(e) => $emit('changed', parseInt(e.target.value))"
               type="radio"
               required
               :name="name"
@@ -37,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, computed, toRefs, ref, watch } from 'vue'
 
 export default defineComponent({
   props: {
@@ -63,16 +64,16 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const selectedVal = ref(props.current)
-
+    const { current } = toRefs(props)
+    let selectedVal = ref(current)
     const icons = computed(() => {
       return props.icon.split(',')
     })
 
     // expose to template
     return {
-      selectedVal,
-      icons
+      icons,
+      selectedVal
     }
   }
 })
