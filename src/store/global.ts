@@ -14,7 +14,11 @@ const state = reactive({
     notes: ''
   } as Meal,
   availableTags: ['Healthy', 'Unhealthy','Post Workout', 'Low Carb', 'Snack', 'Breakfast', 'Lunch', 'Dinner'],
-  storedData: [] as Meal[]
+  storedData: [] as Meal[],
+  user:{
+    loggedIn:false,
+    data:null
+  }
 })
 
 const actions = {

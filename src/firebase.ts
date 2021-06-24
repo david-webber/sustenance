@@ -52,3 +52,27 @@ export const useLoadMeals = () => {
   onUnmounted(close)
   return meals
 }
+
+//not allowing registration at the moment, but keep this here for now as it works as barebones fn
+// export const registerUser = (email:string,password:string) => {
+//   firebaseApp
+//   .auth()
+//   .createUserWithEmailAndPassword(email, password)
+// }
+
+export const logUserIn = async (email:string,password:string) => {
+
+  return await firebaseApp
+  .auth()
+  .signInWithEmailAndPassword(email, password)
+  .then(rsp => {
+    console.log(rsp);
+    return rsp;
+  })
+  .catch(err => {
+    return err
+  });
+
+}
+
+
