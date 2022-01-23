@@ -7,7 +7,6 @@
         <template v-if="action == 'addNew'"> Cancel </template>
         <template v-else> Add a Meal </template>
       </button>
-      <button disabled>Find a Meal</button>
     </div>
     <MealForm v-if="action == 'addNew'" action="add" />
 
@@ -38,7 +37,7 @@
         </h3>
         <p>Tastiness: {{ data.rating }}</p>
         <p>Difficulty: {{ data.difficulty }}</p>
-        <p>Notes: {{ data.notes }}</p>
+        <p v-if="data.notes">Notes: {{ data.notes }}</p>
         <template v-if="data.tags">
           <div class="tags-container">
             <div v-for="(tag, i) in data.tags" :key="i" class="tag active">
