@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleFormSubmission">
+  <form class="addMealForm" @submit.prevent="handleFormSubmission">
     <div>
       <label for="foodName">Meal Name</label>
       <input
@@ -127,6 +127,11 @@ form {
     font-weight: bold;
     font-size: 1.3rem;
   }
+}
+.addMealForm {
+  border: 1px dotted var(--border-colour);
+  padding: 1rem;
+  border-radius: var(--border-radius);
 }
 .tags-container {
   display: flex;
