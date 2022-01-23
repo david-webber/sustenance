@@ -12,7 +12,7 @@
 
     <br />
     <h3>Your Meals</h3>
-    <form>
+    <form @submit.prevent>
       <label>Filter</label>
       <input type="text" v-model="state.filter" placeholder="Filter/ Search" />
       <label> Sort</label>
@@ -86,7 +86,7 @@ export default defineComponent({
       }
       //filter by name, no speaces, lowercase
       return sorted.value.filter((x: Meal) => {
-        return x.name
+        return JSON.stringify(x)
           .split(' ')
           .join('')
           .toLowerCase()
