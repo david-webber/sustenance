@@ -38,8 +38,6 @@ export default defineComponent({
     const submitForm = async function () {
       const loggedIn = await logUserIn(email.value, password.value)
       if (loggedIn.user) {
-        console.log('logged in', loggedIn)
-        console.log(loggedIn.user)
         state.user.loggedIn = true
         state.user.data = loggedIn.user
         router.push('/')
