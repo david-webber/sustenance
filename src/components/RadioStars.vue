@@ -1,7 +1,6 @@
 <template>
   <div>
     <div>
-      {{ selectedVal }}
       <div class="rating-label">
         <label :for="name">{{ name }}</label>
         <strong
@@ -105,7 +104,7 @@ export default defineComponent({
     z-index: -1;
     opacity: 0;
     ~ label {
-      opacity: 0.3;
+      opacity: 0.5;
       transition: all ease 0.3s;
     }
     &:checked ~ label {
@@ -117,6 +116,10 @@ export default defineComponent({
         content: attr(data-icon);
         font-size: 5.3vw;
         margin-right: 1.3vw;
+        @media screen and (min-width: 800px) {
+          font-size: 3rem;
+          margin-right: 0.5rem;
+        }
       }
       &:hover {
         opacity: 1;
